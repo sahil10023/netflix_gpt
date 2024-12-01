@@ -1,9 +1,24 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Header from './Header'
+import { validateFormData } from '../utils/validate';
 
 const Login = () => {
   const [isSignInForm,setIsSignInForm] = useState(true);
+  const [errorMessage, setErrorMessage] = useState(null);
+
   const toggleSignInForm = () => setIsSignInForm(!isSignInForm);
+
+  const email = useRef(null);
+  const password = useRef(null);
+  const username = useRef(null);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(email.current.value, password.current.value);
+    const result = isSignInForm ? validateFormData({ email: email.current.value, password: password.current.value}) : validateFormData({ email: email.current.value, password: password.current.value, username: username.current.value});
+    setErrorMessage(result);
+    console.log(result);
+  }
   return <>
     <div className='absolute'>
       <Header />
@@ -12,11 +27,12 @@ const Login = () => {
     </div>
     <form className='w-3/12 p-12 my-36 mx-auto right-0 left-0 text-white absolute bg-[rgba(0,0,0,0.8)]'>
       <h1 className='text-3xl font-bold pb-6'>{isSignInForm ? "Sign In" :"Sign Up"}</h1>
-      {!isSignInForm && <input type="text" placeholder='Username' className='px-4 py-4 w-full border-[0.3px] border-white bg-transparent rounded-md mb-4' />}
-      <input type="text" placeholder='Email or mobile number ' className='px-4 py-4 w-full border-[0.3px] border-white bg-transparent rounded-md mb-4' />
-      <input type="password" placeholder='Password' className='px-4 py-4 w-full border-[0.1px] border-white bg-transparent rounded-md ' />
-      <button className='h-[40px]  my-6 w-full bg-red-800 text-white rounded-md'>{isSignInForm ? "Sign In" :"Sign Up"}</button>
-      <p className='py-4 text-[rgba(255,255,255,0.7)]'>{isSignInForm ? "New to Netflix?" :"Already registered?"} <span className=' text-white text-bold hover:cursor-pointer hover:underline' onClick={toggleSignInForm}>{isSignInForm ? "Sign In" :"Sign Up"} now</span></p>
+      {!isSignInForm && <input ref={username} type="text" placeholder='Username' className='px-4 py-4 w-full border-[0.3px] border-white bg-transparent rounded-md mb-4' />}
+      <input type="text" ref={email} placeholder='Email or mobile number ' className='px-4 py-4 w-full border-[0.3px] border-white bg-transparent rounded-md mb-4' />
+      <input type="password" ref={password} placeholder='Password' className='px-4 py-4 w-full border-[0.1px] border-white bg-transparent rounded-md ' />
+      {errorMessage && <p className='py-4 text-[rgba(255,0,0,0.7)]'>{errorMessage}</p>}
+      <button onClick={handleSubmit} className='h-[40px]  my-6 w-full bg-red-800 text-white rounded-md'>{isSignInForm ? "Sign In" :"Sign Up"}</button>
+      <p className=' text-[rgba(255,255,255,0.7)]'>{isSignInForm ? "New to Netflix?" :"Already registered?"} <span className=' text-white text-bold hover:cursor-pointer hover:underline' onClick={toggleSignInForm}>{isSignInForm ? "Sign In" :"Sign Up"} now</span></p>
     </form>
   </>
 }
