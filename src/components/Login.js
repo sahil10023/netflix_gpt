@@ -5,6 +5,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfi
 import { auth } from '../utils/firebase';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../utils/userSlice';
+import { AVATAR_URL } from '../utils/constants';
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
@@ -19,7 +20,6 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(email.current.value, password.current.value);
     const result = isSignInForm
       ? validateFormData({ email: email.current.value, password: password.current.value })
       : validateFormData({
@@ -36,7 +36,7 @@ const Login = () => {
           const user = userCredential.user;
           updateProfile(user, {
             displayName: username.current.value,
-            photoURL: 'https://avatars.githubusercontent.com/u/81016048?v=4',
+            photoURL: AVATAR_URL,
           })
           .then(() => {
             const { uid, email, displayName, photoURL } = auth.currentUser;
@@ -50,14 +50,12 @@ const Login = () => {
           const errorCode = error.code;
           const errorMessage = error.message;
           console.error('Error creating user', error);
-          console.log("Error Message: " + errorMessage + ", Error Code: " + errorCode);
         });
     } else {
       //Sign In Logic
       signInWithEmailAndPassword(auth, email.current.value, password.current.value)
         .then((userCredential) => {
           const user = userCredential.user;
-          console.log('User signed in successfully!', user);
         })
         .then(() => {
           const { uid, email, displayName, photoURL } = auth.currentUser;
@@ -67,7 +65,6 @@ const Login = () => {
           const errorCode = error.code;
           const errorMessage = error.message;
           console.error('Error signing in', error);
-          console.log("Error Message: " + errorMessage + ", Error Code: " + errorCode);
           setErrorMessage(errorMessage + errorCode);
         });
     }
