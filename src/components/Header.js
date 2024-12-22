@@ -28,11 +28,11 @@ const Header = () => {
             }
         });
 
-        return () => unSubscribe(); // Clean up the subscription when the component unmounts.
+        return () => unSubscribe(); 
     }, [])
     return (
-        <div className='absolute flex justify-between items-center w-full px-8 py-2 bg-gradient-to-b from-black'>
-            <img className='w-48 py-4 z-[1]' src={Netflix_LOGO}
+        <div className='absolute z-20 flex justify-between items-center w-full px-8 py-2 bg-gradient-to-b from-black'>
+            <img className='w-48 py-4' src={Netflix_LOGO}
                 alt='Netflix Logo' />
 
             {!user && (
