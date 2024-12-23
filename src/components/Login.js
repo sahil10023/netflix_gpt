@@ -5,7 +5,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfi
 import { auth } from '../utils/firebase';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../utils/userSlice';
-import { AVATAR_URL } from '../utils/constants';
+import { AVATAR_URL, Netflix_BG } from '../utils/constants';
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
@@ -38,13 +38,13 @@ const Login = () => {
             displayName: username.current.value,
             photoURL: AVATAR_URL,
           })
-          .then(() => {
-            const { uid, email, displayName, photoURL } = auth.currentUser;
-            dispatch(loginUser({ uid: uid, email: email, displayName: displayName, photoURL: photoURL }));
-          })
-          .catch((error)=>{
-            setErrorMessage(error.message);
-          })
+            .then(() => {
+              const { uid, email, displayName, photoURL } = auth.currentUser;
+              dispatch(loginUser({ uid: uid, email: email, displayName: displayName, photoURL: photoURL }));
+            })
+            .catch((error) => {
+              setErrorMessage(error.message);
+            })
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -75,7 +75,7 @@ const Login = () => {
       <div className="absolute inset-0 z-[-1]">
         <Header />
         <img
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/8e8ff9d3-17b4-4ce1-b571-06ba4e025cca/web_tall_panel/IN-en-20241125-TRIFECTA-perspective_fe8a8dbc-e13a-452e-a9c6-284b08c4f974_large.jpg"
+          src={Netflix_BG}
           alt="Netflix Background"
           className="h-full w-full object-cover"
         />
