@@ -9,7 +9,7 @@ const GPTSearch = () => {
       <img
         src={Netflix_BG}
         alt="Netflix Background"
-        className="h-full w-full object-cover -z-10 absolute"
+        className="h-full w-full object-cover -z-10 fixed"
       />
       <GPTSearchBar />
       <GPTMovieSuggestions />

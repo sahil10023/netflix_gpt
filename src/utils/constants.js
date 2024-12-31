@@ -8,11 +8,15 @@ export const API_OPTIONS = {
   method: 'GET',
   headers: {
     accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzNDcyYmE2YTYwODEzNDZiZTY1YzYxM2Q3ZDg1MDhjNyIsIm5iZiI6MTczMzU3MzY2Ny45NjcsInN1YiI6IjY3NTQzYzIzOGUwMzNlOTEzNmRjYWJjNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.aLu6TDXK473SobmaQXIE7XrFmvRPA2eUvEIX6tKMTy4'
+    Authorization: `Bearer ${process.env.REACT_APP_TMDB_API_KEY}`
   }
 };
 
 export const IMG_CDN = "https://image.tmdb.org/t/p/w500/";
+
+export const COHERE_API_KEY = process.env.REACT_APP_COHERE_API_KEY;
+
+export const OPENAI_ORGANIZATION = ""
 
 export const SUPPORTED_LANGUAGES = [
   { identifier: "eng", name: "English" },
@@ -21,5 +25,5 @@ export const SUPPORTED_LANGUAGES = [
   { identifier: "ger", name: "German" },
   { identifier: "fra", name: "French" },
   { identifier: "jap", name: "Japanese" },
-  { identifier: "max", name: "Maxicon"}
+  { identifier: "max", name: "Maxicon" }
 ];
