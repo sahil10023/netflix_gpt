@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
 import { API_OPTIONS } from '../utils/constants'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addPopularMovies } from '../utils/movieSlice'
 
 
 const usePopularMovies = () => {
     const dispatch = useDispatch();
+    const popularMovies = useSelector(store => store.movies.popularMovies);
     const url = 'https://api.themoviedb.org/3/movie/popular?language=en-US&page=1';
     const getPopularMovies = async () => {
         const response = await fetch(url, API_OPTIONS)
@@ -15,7 +16,7 @@ const usePopularMovies = () => {
     }
 
     useEffect(() => {
-        const data = getPopularMovies()
+        const data = popularMovies ? null : getPopularMovies();
         // cleanup function to prevent memory leak
         return () => data;
     }, []);

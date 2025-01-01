@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
 import { API_OPTIONS } from '../utils/constants'
-import { useDispatch } from 'react-redux'
-import {     addAiringTodayMovies } from '../utils/movieSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { addAiringTodayMovies } from '../utils/movieSlice'
 
 
 const useAiringTodayMovies = () => {
     const dispatch = useDispatch();
+    const airingTodayMovies = useSelector(store => store.movies.airingTodayMovies);
     const url = 'https://api.themoviedb.org/3/tv/airing_today?language=en-US&page=1';
     const getAiringTodayMovies = async () => {
         const response = await fetch(url, API_OPTIONS)
@@ -15,7 +16,7 @@ const useAiringTodayMovies = () => {
     }
 
     useEffect(() => {
-        const data = getAiringTodayMovies();
+        const data = airingTodayMovies ? null : getAiringTodayMovies();
         // cleanup function to prevent memory leak
         return () => data;
     }, []);
