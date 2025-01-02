@@ -81,7 +81,7 @@ const Login = () => {
         />
       </div>
       <form
-        className="w-[300px] sm:w-6/12 md:w-5/12 lg:w-3/12 p-6 sm:p-12 my-10 mx-auto top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white absolute bg-[rgba(0,0,0,0.8)] rounded-md shadow-lg"
+        className="w-[300px] sm:w-6/12 md:w-5/12 lg:w-3/12 p-6 sm:p-12 mt-6 mb-10 mx-auto top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white absolute bg-[rgba(0,0,0,0.8)] rounded-md shadow-lg"
       >
         <h1 className="text-2xl sm:text-3xl font-bold pb-6">
           {isSignInForm ? 'Sign In' : 'Sign Up'}
@@ -125,6 +125,11 @@ const Login = () => {
           </span>
         </p>
       </form>
+      {(
+        <div className="w-96 mt-[88%] md:mt-[41%] mx-auto bg-red-600 text-white font-bold text-center overflow-hidden">
+          This is a personal project for learning purposes only and is not affiliated with or endorsed by Netflix.
+        </div>
+      )}
     </>
   );
 };

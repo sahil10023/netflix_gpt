@@ -1,30 +1,40 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import lang from '../utils/languageConstants'
 import { useDispatch, useSelector } from 'react-redux'
 import { API_OPTIONS, COHERE_API_KEY } from '../utils/constants';
-import { addGptMovieResult } from '../utils/gptSlice';
+import { addGptMovieResult, setUserApiKey } from '../utils/gptSlice';
 
 const GPTSearchBar = () => {
     const currentLanguage = useSelector(store => store.config.lang);
     const searchText = useRef(null);
     const dispatch = useDispatch();
-
+    const [isHaveKey, setIsHaveKey] = useState(false);
+    const userApiKey = useSelector((store) => store.gpt.userApiKey);
     const searctMovieTMDB = async (movie) => {
         const url = "https://api.themoviedb.org/3/search/movie?query=" + movie + "&include_adult=false&language=en-US&page=1";
         const data = await fetch(url, API_OPTIONS);
         const json = await data.json();
         return json.results;
     };
-
+    const handelUseMyKey = () => {
+        setIsHaveKey(!isHaveKey);
+    };
     const handleSubmit = async (event) => {
         event.preventDefault();
+        if (isHaveKey) {
+            dispatch(setUserApiKey(searchText.current.value));
+            searchText.current.value = null;
+            setIsHaveKey(!isHaveKey);
+            return;
+        }
+        const cohereApiKey = COHERE_API_KEY(userApiKey);
         const query = "Act as a Movie Recommendation System and Suggest Movie Result For Query " + searchText.current.value + ". only give me result of 5 movies only in comma separated format like the example result given ahead. Example Result : Gadar,Sholey,Don,Golmaal,Koi Mil Gya";
 
         try {
             const response = await fetch("https://api.cohere.ai/v1/generate", {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${COHERE_API_KEY}`, // Replace with Cohere's API key
+                    Authorization: `Bearer ${cohereApiKey}`, // Replace with Cohere's API key
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
@@ -50,7 +60,6 @@ const GPTSearchBar = () => {
             const promiseArray = movieList?.map((movie) => searctMovieTMDB(movie));
 
             const tmdbResult = await Promise.all(promiseArray);
-            console.log("TMDB Result:", tmdbResult);
             dispatch(addGptMovieResult({ movieNames: movieList, movieResults: tmdbResult }));
 
         } catch (error) {
@@ -60,24 +69,26 @@ const GPTSearchBar = () => {
 
 
     return (
-        <div className='pt-[10%] flex justify-center'>
-            <form className='bg-black w-1/3 grid grid-cols-12 rounded-md' onSubmit={handleSubmit}>
+        <div className='pt-[36%] md:pt-[10%] flex justify-center'>
+            <form className='bg-black w-full md:w-[50%] grid grid-cols-12 rounded-md' onSubmit={handleSubmit}>
                 <input
                     ref={searchText}
                     type='text'
-                    className='m-4 p-4 col-span-9'
-                    placeholder={lang[currentLanguage].gptSearchPlaceHolder}
+                    className='m-4 p-4 col-span-7'
+                    placeholder={isHaveKey ? "Enter Your Key Here" : lang[currentLanguage].gptSearchPlaceHolder}
                 />
                 <button
                     type='submit'
-                    className='py-2 px-4 m-4 col-span-3 bg-red-700 text-white rounded-lg'
+                    className='py-2 px-4  my-4  col-span-2 bg-red-700 text-white rounded-lg'
                 >
-                    {lang[currentLanguage].search}
+                    {isHaveKey ? "Send Key" : lang[currentLanguage].search}
                 </button>
+                <button type='button' className='py-2 px-4 m-4  col-span-3 bg-red-700 text-white rounded-lg' onClick={handelUseMyKey}>Use {isHaveKey ? lang[currentLanguage].search : "My Key"}</button>
             </form>
         </div>
     );
 };
 
+// i have to add language constants for send, use, enter your key, my key
 
 export default GPTSearchBar;

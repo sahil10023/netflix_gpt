@@ -14,9 +14,9 @@ export const API_OPTIONS = {
 
 export const IMG_CDN = "https://image.tmdb.org/t/p/w500/";
 
-export const COHERE_API_KEY = process.env.REACT_APP_COHERE_API_KEY;
+export const COHERE_API_KEY = (userApiKey) =>
+  userApiKey ? userApiKey : process.env.REACT_APP_COHERE_API_KEY;
 
-export const OPENAI_ORGANIZATION = ""
 
 export const SUPPORTED_LANGUAGES = [
   { identifier: "eng", name: "English" },
